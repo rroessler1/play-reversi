@@ -33,7 +33,6 @@ def alpha_beta_result(game_state, max_depth, best_black, best_white, eval_fn):
                 best_black, best_white,                            # <5>
                 eval_fn)                                           # <5>
             our_result = -1 * opponent_best_result                 # <6>
-
             if our_result > best_so_far:                           # <7>
                 best_so_far = our_result                           # <7>
     # end::alpha-beta-prune-1[]
@@ -86,7 +85,6 @@ class AlphaBetaAgent(Agent):
                     self.eval_fn)
                 # Our outcome is the opposite of our opponent's outcome.
                 our_best_outcome = -1 * opponent_best_outcome
-                print("Our best outcome is %s for move %s,%s" % (our_best_outcome, point.row, point.col))
                 if (not best_moves) or our_best_outcome > best_score:
                     # This is the best move so far.
                     best_moves = [possible_move]
@@ -99,6 +97,5 @@ class AlphaBetaAgent(Agent):
                     # This is as good as our previous best move.
                     best_moves.append(possible_move)
             # For variety, randomly select among all equally good moves.
-        print("Best score was %s" % best_score)
         return random.choice(best_moves)
 # end::alpha-beta-agent[]

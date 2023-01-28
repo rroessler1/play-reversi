@@ -6,7 +6,7 @@ from reversi_types import Point, Player
 
 
 class AlphaBetaBot(Agent):
-    search_depth = 6
+    search_depth = 5
 
     def select_move(self, game_state):
         alpha = float('-inf')
@@ -34,7 +34,6 @@ class AlphaBetaBot(Agent):
                         best_moves.append(move)
         if not best_moves:
             return Move.pass_turn()
-        print("Best score was %s" % best_score)
         return random.choice(best_moves)
 
     def alpha_beta_search(self, game_state, current_player, alpha, beta, depth):
@@ -58,7 +57,7 @@ class AlphaBetaBot(Agent):
                     score = self.alpha_beta_search(next_state, next_state.next_player, alpha, beta, depth-1)
                     best_score = max(score, best_score)
                     alpha = max(score, alpha)
-                    if beta <= alpha:
+                    if beta < alpha:
                         return best_score
             return best_score
 
@@ -71,6 +70,6 @@ class AlphaBetaBot(Agent):
                     score = self.alpha_beta_search(next_state, next_state.next_player, alpha, beta, depth-1)
                     best_score = min(score, best_score)
                     beta = min(score, beta)
-                    if beta <= alpha:
+                    if beta < alpha:
                         return best_score
             return best_score
