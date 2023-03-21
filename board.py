@@ -7,42 +7,12 @@ class IllegalMoveException(Exception):
     pass
 
 
-class Move:
-    def __init__(self, point, is_pass=False):
-        assert (point is not None) ^ is_pass
-        self.point = point
-        self.is_pass = is_pass
-
-    @classmethod
-    def play(cls, point):
-        return Move(point)
-
-    @classmethod
-    def pass_turn(cls):
-        return Move(None, True)
-
-
-class Shift(namedtuple('Shift', 'x y')):
-    @staticmethod
-    def shifts():
-        return [
-            Shift(-1, -1),
-            Shift(0, -1),
-            Shift(1, -1),
-            Shift(-1, 0),
-            Shift(1, 0),
-            Shift(-1, 1),
-            Shift(0, 1),
-            Shift(1, 1),
-        ]
-
-
 class Board:
     def __init__(self, num_rows, num_cols):
         self.num_rows = num_rows
         self.num_cols = num_cols
+        self.possibly_valid_points = set()
         self._grid = {}
-        self._possibly_valid_points = set()
         self.set_initial_reversi_state()
 
     def set_initial_reversi_state(self):
@@ -67,13 +37,13 @@ class Board:
             raise IllegalMoveException("That is not a valid move, as it won't flip any pieces.")
         self._grid[point] = player
         self.add_adjacent_points_as_possible_moves(point)
-        self._possibly_valid_points.remove(point)
+        self.possibly_valid_points.remove(point)
 
     def add_adjacent_points_as_possible_moves(self, played_point):
         for shift in Shift.shifts():
             neighbor = played_point.get_neighbor(shift.x, shift.y)
             if self.is_on_grid(neighbor) and not self._grid.get(neighbor):
-                self._possibly_valid_points.add(neighbor)
+                self.possibly_valid_points.add(neighbor)
 
     def get(self, point):
         return self._grid.get(point)
@@ -117,6 +87,13 @@ class Board:
             if self.maybe_flip(neighbor, player, shift, do_flip=False):
                 return True
         return False
+
+    def get_all_valid_moves(self, player):
+        valid_moves = set()
+        for move in self.possibly_valid_points:
+            if self.is_valid_move_for_player(move, player):
+                valid_moves.add(move)
+        return valid_moves
 
 
 class GameState:
