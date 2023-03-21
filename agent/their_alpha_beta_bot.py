@@ -1,8 +1,7 @@
 import random
 
 from agent.base import Agent
-from board import Move
-from reversi_types import Player
+from reversi_types import Move, Player
 
 __all__ = [
     'AlphaBetaAgent',

@@ -1,14 +1,14 @@
 import random
 from agent.base import Agent
-from board import Move
-from board import GameState
-from reversi_types import Point, Player
+from board import Board
+from game_state import GameState
+from reversi_types import Player, Move
 
 
 class AlphaBetaBot(Agent):
     search_depth = 5
 
-    def select_move(self, game_state):
+    def select_move(self, game_state: GameState) -> Move:
         alpha = float('-inf')
         beta = float('inf')
         best_score = alpha if game_state.next_player == Player.white else beta
@@ -36,7 +36,7 @@ class AlphaBetaBot(Agent):
             return Move.pass_turn()
         return random.choice(best_moves)
 
-    def alpha_beta_search(self, game_state, current_player, alpha, beta, depth):
+    def alpha_beta_search(self, game_state: GameState, current_player: Player, alpha: float, beta: float, depth: int) -> float:
         if game_state.is_over():
             winner = game_state.get_winner()
             if winner == Player.white:
@@ -46,7 +46,7 @@ class AlphaBetaBot(Agent):
             return 0
 
         if depth == 0:
-            return GameState.corner_evaluation_function(game_state)
+            return Board.corner_evaluation_function(game_state.board)
 
         if current_player == Player.white:
             best_score = float('-inf')

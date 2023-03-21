@@ -88,3 +88,26 @@ class Board:
             if self.maybe_flip(neighbor, player, shift, do_flip=False):
                 return True
         return False
+
+    def get_result(self) -> Dict[Player, int]:
+        res: Dict[Player, int] = {}
+        for key, value in self._grid.items():
+            if res.get(value) is None:
+                res[value] = 1
+            else:
+                res[value] += 1
+        return res
+
+    @staticmethod
+    def corner_evaluation_function(board: Board) -> int:
+        corners = [Point(0, 0), Point(0, 7), Point(7, 0), Point(7, 7)]
+        res = {Player.white: 0, Player.black: 0}
+        for corner in corners:
+            if board._grid.get(corner):
+                res[board._grid.get(corner)] += 50
+        return res[Player.white] - res[Player.black]
+
+    @staticmethod
+    def piece_count_evaluation_function(board: Board) -> int:
+        piece_count = board.get_result()
+        return piece_count[Player.white] - piece_count[Player.black]

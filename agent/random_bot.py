@@ -1,7 +1,6 @@
 import random
 from agent.base import Agent
-from board import Move
-from reversi_types import Point
+from reversi_types import Move, Point
 
 
 class RandomBot(Agent):

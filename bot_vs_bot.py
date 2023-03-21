@@ -1,16 +1,16 @@
 import agent.random_bot
-import board
-import reversi_types
+from game_state import GameState
+from reversi_types import Player
 from utils import print_move, print_board
 import time
 
 
 def main():
     board_size = 8
-    game = board.GameState.new_game(board_size)
+    game = GameState.new_game(board_size)
     bots = {
-        reversi_types.Player.black: agent.random_bot.RandomBot(),
-        reversi_types.Player.white: agent.random_bot.RandomBot(),
+        Player.black: agent.random_bot.RandomBot(),
+        Player.white: agent.random_bot.RandomBot(),
     }
     while not game.is_over():
         time.sleep(.1)

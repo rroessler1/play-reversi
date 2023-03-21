@@ -1,29 +1,30 @@
-import reversi_types
+from board import Board
+from reversi_types import Move, Player, Point
 
 
 COLS = 'ABCDEFGH'
 PIECE_TO_CHAR = {
     None: " . ",
-    reversi_types.Player.black: ' X ',
-    reversi_types.Player.white: ' O ',
+    Player.black: ' X ',
+    Player.white: ' O ',
 }
 
 
-def move_from_coordinates(coords_string):
+def point_from_coordinates(coords_string: str) -> Point:
     col = COLS.index(coords_string[0])
     row = int(coords_string[1])
-    return reversi_types.Point(row, col)
+    return Point(row, col)
 
 
-def print_move(player, move):
+def print_move(player: Player, move: Move) -> None:
     move_str = "passes" if move.is_pass else '%s%d' % (COLS[move.point.col], move.point.row)
     print('%s %s' % (player, move_str))
 
 
-def print_board(board):
+def print_board(board: Board) -> None:
     print("    " + "  ".join([c for c in COLS]))
     for r in range(board._num_rows):
-        row_str = "".join([PIECE_TO_CHAR[board._grid.get(reversi_types.Point(r, c))] for c in range(board._num_cols)])
+        row_str = "".join([PIECE_TO_CHAR[board._grid.get(Point(r, c))] for c in range(board._num_cols)])
         print(" " + str(r) + " " + row_str)
     valid_moves = [("%s%s " % (COLS[p.col], p.row)) for p in board._possibly_valid_points]
     valid_moves.sort()
