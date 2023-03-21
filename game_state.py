@@ -42,7 +42,7 @@ class GameState:
         #       but we're actually validating elsewhere so it's ok
         if move.is_pass:
             return True
-        return self.board.is_valid_point_to_play(move, player)
+        return self.board.is_valid_point_to_play(move.point, player)
 
     def get_result(self) -> Dict[Player, int]:
         return self.board.get_result()
