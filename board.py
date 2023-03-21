@@ -1,5 +1,5 @@
 from __future__ import annotations
-from reversi_types import Move, Player, Point, Shift
+from reversi_types import Player, Point, Shift
 from typing import Dict, Set
 
 
@@ -78,13 +78,11 @@ class Board:
             return True
         return False
 
-    # TODO: not sure the board should understand "moves", so far it has just worked with points
-    #       maybe that should be gamestate only?
-    def is_valid_move_for_player(self, move: Move, player: Player) -> bool:
-        if not self._point_is_open(move.point):
+    def is_valid_point_to_play(self, point: Point, player: Player) -> bool:
+        if not self._point_is_open(point):
             return False
         for shift in Shift.shifts():
-            neighbor = move.point.get_neighbor(shift.x, shift.y)
+            neighbor = point.get_neighbor(shift.x, shift.y)
             if self.maybe_flip(neighbor, player, shift, do_flip=False):
                 return True
         return False
