@@ -16,7 +16,6 @@ class GameState:
         if not move.is_pass:
             # TODO: I don't think this should be needed, and I bet it slows it down a lot
             next_board = copy.deepcopy(self.board)
-            # TODO: let's do validation if this is valid, if that's the Pythonic way
             next_board.place_piece(self.next_player, move.point)
         else:
             next_board = self.board

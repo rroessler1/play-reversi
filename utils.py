@@ -10,7 +10,13 @@ PIECE_TO_CHAR = {
 }
 
 
+class MalformedMoveCoordinatesException(Exception):
+    pass
+
+
 def point_from_coordinates(coords_string: str) -> Point:
+    if len(coords_string) != 2 or coords_string[0] not in COLS or coords_string[1] < '0' or coords_string[1] > '7':
+        raise MalformedMoveCoordinatesException(f"%s is not a valid coordinate string." % coords_string)
     col = COLS.index(coords_string[0])
     row = int(coords_string[1])
     return Point(row, col)

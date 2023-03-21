@@ -6,7 +6,7 @@ from reversi_types import Player, Move
 
 
 class AlphaBetaBot(Agent):
-    search_depth = 5
+    search_depth = 2
 
     def select_move(self, game_state: GameState) -> Move:
         alpha = float('-inf')

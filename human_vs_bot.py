@@ -3,7 +3,7 @@ from agent import alpha_beta_bot, their_alpha_beta_bot
 from board import IllegalMoveException
 from game_state import GameState
 from reversi_types import Move, Player
-from utils import print_move, print_board, point_from_coordinates
+from utils import MalformedMoveCoordinatesException, print_move, print_board, point_from_coordinates
 import time
 
 
@@ -16,8 +16,13 @@ def main():
         time.sleep(.1)
         print_board(game.board)
         if game.next_player == Player.black:
-            human_move = input("Enter your move:")
-            move = Move.play(point_from_coordinates(human_move.strip()))
+            move = None
+            while not move:
+                human_move = input("Enter your move:").strip()
+                try:
+                    move = Move.play(point_from_coordinates(human_move))
+                except MalformedMoveCoordinatesException as e:
+                    print(e)
         else:
             move = bot.select_move(game)
         print_move(game.next_player, move)
