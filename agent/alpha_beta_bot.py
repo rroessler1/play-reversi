@@ -13,7 +13,7 @@ class AlphaBetaBot(Agent):
         beta = float('inf')
         best_score = alpha if game_state.next_player == Player.white else beta
         best_moves = []
-        for point in game_state.board.possibly_valid_points:
+        for point in game_state.board._possibly_valid_points:
             move = Move.play(point)
             if game_state.is_valid_move_for_player(Move.play(point), game_state.next_player):
                 next_state = game_state.apply_move(move)
@@ -50,7 +50,7 @@ class AlphaBetaBot(Agent):
 
         if current_player == Player.white:
             best_score = float('-inf')
-            for point in game_state.board.possibly_valid_points:
+            for point in game_state.board._possibly_valid_points:
                 move = Move.play(point)
                 if game_state.is_valid_move_for_player(Move.play(point), current_player):
                     next_state = game_state.apply_move(move)
@@ -63,7 +63,7 @@ class AlphaBetaBot(Agent):
 
         if current_player == Player.black:
             best_score = float('inf')
-            for point in game_state.board.possibly_valid_points:
+            for point in game_state.board._possibly_valid_points:
                 move = Move.play(point)
                 if game_state.is_valid_move_for_player(Move.play(point), current_player):
                     next_state = game_state.apply_move(move)

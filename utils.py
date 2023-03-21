@@ -22,9 +22,9 @@ def print_move(player, move):
 
 def print_board(board):
     print("    " + "  ".join([c for c in COLS]))
-    for r in range(board.num_rows):
-        row_str = "".join([PIECE_TO_CHAR[board._grid.get(reversi_types.Point(r, c))] for c in range(board.num_cols)])
+    for r in range(board._num_rows):
+        row_str = "".join([PIECE_TO_CHAR[board._grid.get(reversi_types.Point(r, c))] for c in range(board._num_cols)])
         print(" " + str(r) + " " + row_str)
-    valid_moves = [("%s%s " % (COLS[p.col], p.row)) for p in board.possibly_valid_points]
+    valid_moves = [("%s%s " % (COLS[p.col], p.row)) for p in board._possibly_valid_points]
     valid_moves.sort()
     print(" ".join(valid_moves))
