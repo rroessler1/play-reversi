@@ -23,7 +23,7 @@ def alpha_beta_result(game_state, max_depth, best_black, best_white, eval_fn):
         return eval_fn(game_state)                             # <2>
 
     best_so_far = MIN_SCORE
-    for point in game_state.board._possibly_valid_points:
+    for point in game_state.board._adjacent_unoccupied_points:
         candidate_move = Move.play(point)                      # <3>
         if game_state.is_valid_move_for_player(Move.play(point), game_state.next_player):
             next_state = game_state.apply_move(candidate_move)     # <4>
@@ -71,7 +71,7 @@ class AlphaBetaAgent(Agent):
         best_black = MIN_SCORE
         best_white = MIN_SCORE
         # Loop over all legal moves.
-        for point in game_state.board._possibly_valid_points:
+        for point in game_state.board._adjacent_unoccupied_points:
             possible_move = Move.play(point)
             if game_state.is_valid_move_for_player(Move.play(point), game_state.next_player):
                 # Calculate the game state if we select this move.

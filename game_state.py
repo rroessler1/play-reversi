@@ -2,7 +2,7 @@ from __future__ import annotations
 import copy
 from board import Board
 from reversi_types import Move, Player
-from typing import Dict, Optional
+from typing import Dict, Optional, Iterator
 
 
 class GameState:
@@ -20,6 +20,13 @@ class GameState:
         else:
             next_board = self.board
         return GameState(next_board, self.next_player.other, self, move)
+
+    def get_all_valid_moves(self) -> Iterator[Move]:
+        valid_points = list(self.board.get_all_valid_points_to_play(self.next_player))
+        if len(valid_points) == 0:
+            return Move.pass_turn()
+        else:
+            return map(lambda p: Move.play(p), valid_points)
 
     def get_winner(self) -> Optional[Player]:
         res = self.get_result()

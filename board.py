@@ -1,6 +1,6 @@
 from __future__ import annotations
 from reversi_types import Player, Point, Shift
-from typing import Dict, Set, Optional
+from typing import Dict, Set, Optional, Iterator
 
 
 class IllegalMoveException(Exception):
@@ -11,7 +11,7 @@ class Board:
     def __init__(self, num_rows: int, num_cols: int):
         self._num_rows: int = num_rows
         self._num_cols: int = num_cols
-        self._possibly_valid_points: Set[Point] = set()
+        self._adjacent_unoccupied_points: Set[Point] = set()
         self._grid: Dict[Point, Player] = {}
         self._set_initial_board_state()
 
@@ -29,7 +29,7 @@ class Board:
         for shift in Shift.shifts():
             neighbor = played_point.get_neighbor(shift.x, shift.y)
             if self._is_on_grid(neighbor) and not self.get_player_at_point(neighbor):
-                self._possibly_valid_points.add(neighbor)
+                self._adjacent_unoccupied_points.add(neighbor)
 
     def _is_on_grid(self, point: Point) -> bool:
         return 0 <= point.row < self._num_rows and 0 <= point.col < self._num_cols
@@ -61,6 +61,9 @@ class Board:
     def get_player_at_point(self, point: Point) -> Optional[Player]:
         return self._grid.get(point)
 
+    def get_all_valid_points_to_play(self, player: Player) -> Iterator[Point]:
+        return filter(lambda point: self.is_valid_point_to_play(point, player), self._adjacent_unoccupied_points)
+
     def get_result(self) -> Dict[Player, int]:
         res: Dict[Player, int] = {}
         for key, value in self._grid.items():
@@ -91,7 +94,7 @@ class Board:
             raise IllegalMoveException("That is not a valid move, as it won't flip any pieces.")
         self._grid[point] = player
         self._add_adjacent_points_as_possible_points(point)
-        self._possibly_valid_points.remove(point)
+        self._adjacent_unoccupied_points.remove(point)
 
     @staticmethod
     def corner_evaluation_function(board: Board) -> int:

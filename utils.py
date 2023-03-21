@@ -32,6 +32,6 @@ def print_board(board: Board) -> None:
     for r in range(board._num_rows):
         row_str = "".join([PIECE_TO_CHAR[board.get_player_at_point(Point(r, c))] for c in range(board._num_cols)])
         print(" " + str(r) + " " + row_str)
-    valid_moves = [("%s%s " % (COLS[p.col], p.row)) for p in board._possibly_valid_points]
+    valid_moves = [("%s%s " % (COLS[p.col], p.row)) for p in board._adjacent_unoccupied_points]
     valid_moves.sort()
     print(" ".join(valid_moves))
