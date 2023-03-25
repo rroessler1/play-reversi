@@ -17,7 +17,7 @@ class MonteCarloNode(object):
         }
         self.num_rollouts: int = 0
         self.children: List[MonteCarloNode] = []
-        self.unvisited_moves: List[Move] = list(game_state.get_all_valid_moves())
+        self.unvisited_moves: List[Move] = game_state.get_all_valid_moves()
 
     def add_random_child(self) -> MonteCarloNode:
         idx = random.randint(0, len(self.unvisited_moves) - 1)
