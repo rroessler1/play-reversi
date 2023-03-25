@@ -1,4 +1,4 @@
-from agent import alpha_beta_bot, their_alpha_beta_bot
+from agent import alpha_beta_bot, their_alpha_beta_bot, mct_agent
 # TODO: feels like this shouldn't have to be imported
 from board import IllegalMoveException
 from game_state import GameState
@@ -10,7 +10,7 @@ import time
 def main():
     board_size = 8
     game = GameState.new_game(board_size)
-    bot = alpha_beta_bot.AlphaBetaBot()
+    bot = mct_agent.MctAgent()
     # bot = their_alpha_beta_bot.AlphaBetaAgent(5, board.GameState.corner_evaluation_function)
     while not game.is_over():
         time.sleep(.1)
