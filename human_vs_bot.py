@@ -27,7 +27,7 @@ def main():
             move = bot.select_move(game)
         print_move(game.next_player, move)
         try:
-            game = game.apply_move(move)
+            game.apply_move(move)
         except IllegalMoveException as e:
             print(e)
     results = game.get_result()

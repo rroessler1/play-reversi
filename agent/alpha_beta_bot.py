@@ -5,6 +5,7 @@ from game_state import GameState
 from reversi_types import Player, Move
 
 
+# TODO: currently broken because when selecting a move we should deep copy the game_state
 class AlphaBetaBot(Agent):
     search_depth = 2
 

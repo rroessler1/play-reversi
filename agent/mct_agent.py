@@ -1,10 +1,9 @@
 import math
-import random
 
 from agent.base import Agent
 from game_state import GameState
 from monte_carlo_node import MonteCarloNode
-from reversi_types import Move, Player
+from reversi_types import Move
 
 
 class MctAgent(Agent):
@@ -24,7 +23,7 @@ class MctAgent(Agent):
                 node = self.select_child(node)
             if node.can_add_child():
                 node = node.add_random_child()
-            winner = self.simulate_random_game(node.game_state)
+            winner = node.simulate_random_game()
             while node is not None:
                 node.record_win(winner)
                 node = node.parent
@@ -44,13 +43,6 @@ class MctAgent(Agent):
                 max_score = score
                 best_child = child
         return best_child
-
-    @staticmethod
-    def simulate_random_game(game_state: GameState) -> Player:
-        while not game_state.is_over():
-            possible_moves = game_state.get_all_valid_moves()
-            game_state = game_state.apply_move(random.choice(possible_moves))
-        return game_state.get_winner()
 
 
 def uct_score(parent_rollouts, child_rollouts, win_percentage, temperature):
