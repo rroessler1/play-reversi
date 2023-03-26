@@ -1,6 +1,6 @@
 from __future__ import annotations
 import copy
-from board import Board
+from board import Board, IllegalMoveException
 from reversi_types import Move, Player
 from typing import Dict, Optional, List
 
@@ -17,6 +17,10 @@ class GameState:
             # TODO: I don't think this should be needed, and I bet it slows it down a lot
             next_board = copy.deepcopy(self.board)
             next_board.place_piece(self.next_player, move.point)
+        elif len(list(self.board.get_all_valid_points_to_play(self.next_player))) > 0:
+            raise IllegalMoveException(
+                f"You have some valid moves are are not allowed to pass.\n"
+                f"Valid moves: {list(self.board.get_all_valid_points_to_play(self.next_player))}")
         else:
             next_board = self.board
         return GameState(next_board, self.next_player.other, self, move)

@@ -3,7 +3,7 @@ from agent import alpha_beta_bot, their_alpha_beta_bot, mct_agent, random_bot
 from board import IllegalMoveException
 from game_state import GameState
 from reversi_types import Move, Player
-from utils import MalformedMoveCoordinatesException, print_move, print_board, point_from_coordinates
+from utils import MalformedMoveCoordinatesException, print_move, print_board, move_from_coordinates
 import time
 
 
@@ -20,7 +20,7 @@ def main():
             while not move:
                 human_move = input("Enter your move:").strip()
                 try:
-                    move = Move.play(point_from_coordinates(human_move))
+                    move = move_from_coordinates(human_move)
                 except MalformedMoveCoordinatesException as e:
                     print(e)
         else:

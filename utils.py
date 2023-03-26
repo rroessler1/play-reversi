@@ -14,12 +14,14 @@ class MalformedMoveCoordinatesException(Exception):
     pass
 
 
-def point_from_coordinates(coords_string: str) -> Point:
+def move_from_coordinates(coords_string: str) -> Move:
+    if coords_string.lower().strip() == "pass":
+        return Move.pass_turn()
     if len(coords_string) != 2 or coords_string[0] not in COLS or coords_string[1] < '0' or coords_string[1] > '7':
         raise MalformedMoveCoordinatesException(f"%s is not a valid coordinate string." % coords_string)
     col = COLS.index(coords_string[0])
     row = int(coords_string[1])
-    return Point(row, col)
+    return Move.play(Point(row, col))
 
 
 def print_move(player: Player, move: Move) -> None:
