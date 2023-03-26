@@ -1,7 +1,7 @@
 from __future__ import annotations
 from game_state import GameState
 from reversi_types import Move, Player
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 import random
 
@@ -27,8 +27,9 @@ class MonteCarloNode(object):
         self.children.append(new_node)
         return new_node
 
-    def record_win(self, winner: Player) -> None:
-        self.win_counts[winner] += 1
+    def record_win(self, winner: Optional[Player]) -> None:
+        if winner:
+            self.win_counts[winner] += 1
         self.num_rollouts += 1
 
     def can_add_child(self) -> bool:

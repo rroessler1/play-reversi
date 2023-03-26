@@ -1,7 +1,6 @@
 import math
 import random
 
-import utils
 from agent.base import Agent
 from game_state import GameState
 from monte_carlo_node import MonteCarloNode
@@ -11,26 +10,21 @@ from reversi_types import Move, Player
 class MctAgent(Agent):
     def __init__(self):
         super().__init__()
-        self._num_rounds = 1000
+        self._num_rounds = 500
         self._temperature = 1.5
 
     def select_move(self, game_state: GameState) -> Move:
         root = MonteCarloNode(game_state)
 
         for i in range(self._num_rounds):
-            print(i)
+            if i % 100 == 0:
+                print(i)
             node = root
             while (not node.is_terminal()) and (not node.can_add_child()):
                 node = self.select_child(node)
             if node.can_add_child():
                 node = node.add_random_child()
             winner = self.simulate_random_game(node.game_state)
-            if winner is None:
-                print("No winner")
-                while node:
-                    utils.print_board(node.game_state.board)
-                    print("*******************")
-                    node = node.parent
             while node is not None:
                 node.record_win(winner)
                 node = node.parent

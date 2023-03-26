@@ -1,4 +1,4 @@
-from agent import alpha_beta_bot, their_alpha_beta_bot, mct_agent
+from agent import alpha_beta_bot, their_alpha_beta_bot, mct_agent, random_bot
 # TODO: feels like this shouldn't have to be imported
 from board import IllegalMoveException
 from game_state import GameState
