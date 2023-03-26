@@ -8,7 +8,7 @@ class GameState:
     def __init__(self, board: Board, next_player: Player, move: Move):
         self.board: Board = board
         self.next_player: Player = next_player
-        self._previous_move: Move = Move.pass_turn()
+        self._previous_move: Move = None
         self.move: Move = move
 
     def apply_move(self, move: Move) -> None:
@@ -42,7 +42,8 @@ class GameState:
             return None
 
     def is_over(self) -> bool:
-        return self._previous_move.is_pass and self.move.is_pass
+        return self._previous_move and self._previous_move.is_pass and \
+               self.move and self.move.is_pass
 
     def is_valid_move_for_player(self, move: Move, player: Player) -> bool:
         if self.is_over():

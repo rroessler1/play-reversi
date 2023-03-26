@@ -12,18 +12,19 @@ class MonteCarloNode(object):
         self.game_state: GameState = copy.deepcopy(game_state)
         self.parent: MonteCarloNode = parent
         self.move: Move = move
+        if move:
+            self.game_state.apply_move(move)
         self.win_counts: Dict[Player, int] = {
             Player.black: 0,
             Player.white: 0,
         }
         self.num_rollouts: int = 0
         self.children: List[MonteCarloNode] = []
-        self.unvisited_moves: List[Move] = game_state.get_all_valid_moves()
+        self.unvisited_moves: List[Move] = self.game_state.get_all_valid_moves()
 
     def add_random_child(self) -> MonteCarloNode:
         idx = random.randint(0, len(self.unvisited_moves) - 1)
         new_move = self.unvisited_moves.pop(idx)
-        self.game_state.apply_move(new_move)
         new_node = MonteCarloNode(self.game_state, self, new_move)
         self.children.append(new_node)
         return new_node
