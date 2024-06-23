@@ -4,6 +4,7 @@ import enum
 
 
 class Player(enum.Enum):
+    none = 0
     black = 1
     white = 2
 

@@ -1,6 +1,6 @@
 from __future__ import annotations
 from reversi_types import Player, Point, Shift
-from typing import Dict, Set, Optional, Iterator
+from typing import Dict, Set, Optional, Iterator, List
 
 
 class IllegalMoveException(Exception):
@@ -12,14 +12,14 @@ class Board:
         self._num_rows: int = num_rows
         self._num_cols: int = num_cols
         self._adjacent_unoccupied_points: Set[Point] = set()
-        self._grid: Dict[Point, Player] = {}
+        self._grid: List[List[Player]] = [[Player.none]*num_cols for _i in range(num_rows)]
         self._set_initial_board_state()
 
     def _set_initial_board_state(self) -> None:
-        self._grid[Point(3, 3)] = Player.white
-        self._grid[Point(3, 4)] = Player.black
-        self._grid[Point(4, 3)] = Player.black
-        self._grid[Point(4, 4)] = Player.white
+        self._grid[3][3] = Player.white
+        self._grid[3][4] = Player.black
+        self._grid[4][3] = Player.black
+        self._grid[4][4] = Player.white
         self._add_adjacent_points_as_possible_points(Point(3, 3))
         self._add_adjacent_points_as_possible_points(Point(3, 4))
         self._add_adjacent_points_as_possible_points(Point(4, 3))
@@ -28,7 +28,7 @@ class Board:
     def _add_adjacent_points_as_possible_points(self, played_point: Point) -> None:
         for shift in Shift.shifts():
             neighbor = played_point.get_neighbor(shift.x, shift.y)
-            if self._is_on_grid(neighbor) and not self.get_player_at_point(neighbor):
+            if self._is_on_grid(neighbor) and self.get_player_at_point(neighbor) == Player.none:
                 self._adjacent_unoccupied_points.add(neighbor)
 
     def _is_on_grid(self, point: Point) -> bool:
@@ -51,26 +51,27 @@ class Board:
         flipped_neighbor = self._maybe_flip(neighbor, current_player, shift_direction, do_flip)
         if flipped_neighbor or self.get_player_at_point(neighbor) == current_player:
             if do_flip:
-                self._grid[point] = current_player
+                self._grid[point.row][point.col] = current_player
             return True
         return False
 
     def _point_is_open(self, point: Point) -> bool:
-        return self._is_on_grid(point) and self.get_player_at_point(point) is None
+        return self._is_on_grid(point) and self.get_player_at_point(point) == Player.none
 
-    def get_player_at_point(self, point: Point) -> Optional[Player]:
-        return self._grid.get(point)
+    def get_player_at_point(self, point: Point) -> Player:
+        if not self._is_on_grid(point):
+            return Player.none
+        return self._grid[point.row][point.col]
 
     def get_all_valid_points_to_play(self, player: Player) -> Iterator[Point]:
         return filter(lambda point: self.is_valid_point_to_play(point, player), self._adjacent_unoccupied_points)
 
     def get_result(self) -> Dict[Player, int]:
-        res: Dict[Player, int] = {}
-        for key, value in self._grid.items():
-            if res.get(value) is None:
-                res[value] = 1
-            else:
-                res[value] += 1
+        res: Dict[Player, int] = {Player.white: 0, Player.black: 0, Player.none: 0}
+        for r in range(self._num_rows):
+            for c in range(self._num_cols):
+                res[self._grid[r][c]] += 1
+        del res[Player.none]
         return res
 
     def is_valid_point_to_play(self, point: Point, player: Player) -> bool:
@@ -92,7 +93,7 @@ class Board:
             flipped_something = flipped_something or did_flip
         if not flipped_something:
             raise IllegalMoveException("That is not a valid move, as it won't flip any pieces.")
-        self._grid[point] = player
+        self._grid[point.row][point.col] = player
         self._add_adjacent_points_as_possible_points(point)
         self._adjacent_unoccupied_points.remove(point)
 
@@ -101,7 +102,7 @@ class Board:
         corners = [Point(0, 0), Point(0, 7), Point(7, 0), Point(7, 7)]
         res = {Player.white: 0, Player.black: 0}
         for corner in corners:
-            if board.get_player_at_point(corner):
+            if board.get_player_at_point(corner) != Player.none:
                 res[board.get_player_at_point(corner)] += 50
         return res[Player.white] - res[Player.black]
 

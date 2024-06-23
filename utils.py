@@ -4,7 +4,7 @@ from reversi_types import Move, Player, Point
 
 COLS = 'ABCDEFGH'
 PIECE_TO_CHAR = {
-    None: " . ",
+    Player.none: " . ",
     Player.black: ' X ',
     Player.white: ' O ',
 }
