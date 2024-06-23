@@ -13,12 +13,14 @@ def main():
         Player.black: mct_agent.MctAgent(),
         Player.white: mct_agent.MctAgent(),
     }
-    while len(game.board._grid) < 10:
+    move_count = 0
+    while move_count < 2:
         time.sleep(.1)
         print_board(game.board)
         bot_move = bots[game.next_player].select_move(game)
         print_move(game.next_player, bot_move)
         game.apply_move(bot_move)
+        move_count += 1
     results = game.get_result()
     for player, score in results.items():
         print("Player %s Score %d" % (player, score))
